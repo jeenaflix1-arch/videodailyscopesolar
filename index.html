@@ -293,6 +293,79 @@ body{
     .logo{width:105px;height:105px;}
     .player-card{width:350px;}
 }
+
+/* ===== Screenshot-style player ===== */
+.player-card{
+    width:100%;
+    margin:18px auto 0;
+    border:2px solid rgba(255,184,0,.7);
+    border-radius:24px;
+    background:rgba(0,0,0,.92);
+    padding:16px;
+}
+.player-head{margin-bottom:14px;}
+.player-head h2{font-size:22px;font-weight:800;}
+.player-live{font-size:18px;padding:8px 14px;border-radius:10px;}
+.video-box{
+    aspect-ratio:9/10;
+    border-radius:18px;
+    border:6px solid #000;
+    background:#000;
+}
+.controls-extra{margin-top:18px;}
+.controls-extra a{
+    height:64px;
+    border-radius:18px;
+    font-size:22px;
+    letter-spacing:.5px;
+}
+.video-list{
+    margin-top:18px;
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:8px;
+}
+.video-list button{
+    margin-top:0;
+    width:auto;
+    padding:12px 2px;
+    flex-direction:column;
+    justify-content:center;
+    gap:8px;
+    background:#000;
+    border:3px solid #ffb800;
+    border-radius:18px;
+    font-size:14px;
+    font-weight:800;
+}
+.video-list button::before{
+    content:"▶";
+    width:42px;
+    height:42px;
+    border-radius:50%;
+    background:#ffb800;
+    color:#111;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:16px;
+    padding-left:3px;
+}
+.video-list .tag{background:none;color:#fff;padding:0;font-size:14px;border-radius:0;}
+.video-list button span:not(.tag){display:none;}
+.video-list button.active{box-shadow:0 0 16px rgba(255,184,0,.7);}
+
+/* ===== Fit whole player on one mobile screen ===== */
+.page{min-height:0;height:100vh;height:100dvh;display:flex;flex-direction:column;padding-bottom:0;}
+.content{flex:1;min-height:0;display:flex;flex-direction:column;padding:10px 12px;}
+.player-card{flex:1;min-height:0;margin:0 auto;display:flex;flex-direction:column;padding:12px;}
+.player-head{margin-bottom:10px;}
+.video-box{flex:1;min-height:0;aspect-ratio:auto;}
+.controls-extra{margin-top:10px;}
+.controls-extra a{height:50px;font-size:20px;}
+.video-list{margin-top:10px;}
+.video-list button{padding:8px 2px;gap:6px;}
+.video-list button::before{width:36px;height:36px;}
 </style>
 
 <style>
@@ -496,26 +569,6 @@ body{
 
     <div class="content">
 
-        <div class="hero-row">
-            <div class="title">
-                <h1>SCOPE <span>SOLAR</span></h1>
-            </div>
-            <img class="logo" src="https://i.postimg.cc/9FdXcMy4/imgpsh-fullsize-anim.webp" alt="Scope Solar">
-        </div>
-
-        <div class="tagline">BRIGHT FUTURE.<br>FREE ENERGY.</div>
-        <div class="line"></div>
-
-        <div class="about">
-            We provide smart solar solutions for a cleaner and better tomorrow.
-        </div>
-
-        <div class="mini-box">
-            <div class="mini"><div class="mini-icon">☀️</div><p>CLEAN<br>ENERGY</p></div>
-            <div class="mini"><div class="mini-icon">🍃</div><p>LOWER<br>BILLS</p></div>
-            <div class="mini"><div class="mini-icon">🛡️</div><p>RELIABLE<br>POWER</p></div>
-        </div>
-
         <!-- PLAYER -->
         <div class="player-card">
 
@@ -554,49 +607,8 @@ body{
                 <a id="download-link" href="#">DOWNLOAD</a>
             </div>
 
-        </div>
+            <div class="video-list" id="video-list"></div>
 
-        <div class="features">
-            <div class="feature">
-                <div class="feature-icon">⚡</div>
-                <h3>SAVE ELECTRICITY</h3>
-                <p>Reduce bills<br>up to 80%</p>
-            </div>
-            <div class="feature">
-                <div class="feature-icon">🛡️</div>
-                <h3>RELIABLE & SAFE</h3>
-                <p>High quality equipment<br>& long life</p>
-            </div>
-            <div class="feature">
-                <div class="feature-icon">🍃</div>
-                <h3>ECO FRIENDLY</h3>
-                <p>Clean energy for<br>a green Pakistan</p>
-            </div>
-            <div class="feature">
-                <div class="feature-icon">🎧</div>
-                <h3>24/7 SUPPORT</h3>
-                <p>We are always<br>here to help you</p>
-            </div>
-        </div>
-
-        <!-- VIDEO LIST (right below the player area) -->
-        <div class="video-list" id="video-list"></div>
-
-        <div class="eid-bar">
-            <div>
-                <div class="moon">☾</div>
-                <div class="eid-text">عید<br>مبارک</div>
-            </div>
-            <div class="eid-center">
-                <small>This Eid, give the gift of a better tomorrow.</small>
-                <b>CHOOSE SOLAR.</b>
-                <b>CHOOSE SAVINGS.</b>
-                <b>CHOOSE PAKISTAN.</b>
-            </div>
-            <div class="gift">🎁</div>
-            <div class="urdu">
-                اس عید، روشن مستقبل کا تحفہ دیں۔ بجلی کے اخراجات کم کریں، پاکستان کو مضبوط بنائیں۔
-            </div>
         </div>
 
     </div>
