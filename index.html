@@ -478,7 +478,7 @@ body{
 		}
 	}
 </style>
-<script defer src="/~flock.js" data-proxy-url="/~api/analytics"></script><script defer src="/__l5e/events.b21a279f52bb8621.js" data-artifact-kind="dwl_content_hash" data-artifact-id="35c5bdc709b7ccb8549b76b15992dc075d48891378e54fe3efad9b4401772827" data-commit-sha="d8f6faa88a31c15aeb025aee0aa8548e611f8a08" data-context-token="v1.eyJwcm9qZWN0X2lkIjoibG92cF80MXludDE0MjA0OGpyYTI1N3JweGcycnhyZCIsImFydGlmYWN0X2tpbmQiOiJkd2xfY29udGVudF9oYXNoIiwiYXJ0aWZhY3RfaWQiOiIzNWM1YmRjNzA5YjdjY2I4NTQ5Yjc2YjE1OTkyZGMwNzVkNDg4OTEzNzhlNTRmZTNlZmFkOWI0NDAxNzcyODI3IiwiY29tbWl0X3NoYSI6ImQ4ZjZmYWE4OGEzMWMxNWFlYjAyNWFlZTBhYTg1NDhlNjExZjhhMDgiLCJleHAiOjE3OTU4NjI3NTJ9.GxLLlgQhjV9jTh2nkptOHKIpx9J4HcUpFegUktLW5pc"></script><meta property="og:image" content="https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/lovp_41ynt142048jra257rpxg2rxrd/d89774e7302a55148286144ebb031576_1793270582934.png"><meta name="twitter:image" content="https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/lovp_41ynt142048jra257rpxg2rxrd/d89774e7302a55148286144ebb031576_1793270582934.png"></head>
+<script defer src="/~flock.js" data-proxy-url="/~api/analytics"></script><script defer src="/__l5e/events.b21a279f52bb8621.js" data-artifact-kind="dwl_content_hash" data-artifact-id="9305b4ddb1b01bbd600d70d4b68fb9b204332e3381ae32bfa17940663b8efc69" data-commit-sha="95a77f0cb0cc8f9a8cd9e3ae0b4e4ee5420e89dd" data-context-token="v1.eyJwcm9qZWN0X2lkIjoibG92cF80MXludDE0MjA0OGpyYTI1N3JweGcycnhyZCIsImFydGlmYWN0X2tpbmQiOiJkd2xfY29udGVudF9oYXNoIiwiYXJ0aWZhY3RfaWQiOiI5MzA1YjRkZGIxYjAxYmJkNjAwZDcwZDRiNjhmYjliMjA0MzMyZTMzODFhZTMyYmZhMTc5NDA2NjNiOGVmYzY5IiwiY29tbWl0X3NoYSI6Ijk1YTc3ZjBjYjBjYzhmOWE4Y2Q5ZTNhZTBiNGU0ZWU1NDIwZTg5ZGQiLCJleHAiOjE3OTU4NjM5MzZ9.93tZy731sg2MqjVr99xDmQEBQd3szem9joRi3krb6hk"></script><meta property="og:image" content="https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/lovp_41ynt142048jra257rpxg2rxrd/00faeed21a73ab78a1bc8f857fca1288_1793271809229.png"><meta name="twitter:image" content="https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/lovp_41ynt142048jra257rpxg2rxrd/00faeed21a73ab78a1bc8f857fca1288_1793271809229.png"></head>
 
 <body>
 
@@ -609,7 +609,7 @@ const API_BASE = "https://drive-video-nook.lovable.app";
 let videos = [];
 
 function driveStream(id){
-    return "https://drive.usercontent.google.com/download?id=" + id + "&export=download&confirm=t";
+    return API_BASE + "/api/public/stream/" + encodeURIComponent(id);
 }
 
 const vid     = document.getElementById('vid');
@@ -634,6 +634,8 @@ function playVideo(index){
     const v = videos[index];
     titleEl.innerText = v.title;
     vid.dataset.try = "0";
+    vid.dataset.id = v.id;
+    if(typeof clearFrame === "function"){ clearFrame(); }
     vid.style.display = "block"; ctrl.classList.add("hide");
     vid.src = driveStream(v.id);
     dlLink.href = API_BASE + "/api/public/download/" + encodeURIComponent(v.id);
@@ -646,18 +648,32 @@ function playVideo(index){
     vid.dataset.id = v.id;
 }
 
-/* اگر ڈرائیو سیدھی ویڈیو نہ چلنے دے تو ڈرائیو کا اپنا پلیئر خود کھل جائے */
+/* اگر ویڈیو نہ چلے تو پہلے سیدھا ڈرائیو سے، پھر ڈرائیو کا اپنا پلیئر خود کھل جائے */
+const boxEl = document.querySelector('.video-box');
+function clearFrame(){
+    const f = boxEl.querySelector('iframe');
+    if(f){ f.remove(); }
+}
 vid.addEventListener('error', function(){
+    if(!vid.getAttribute('src')) return;
     if(vid.dataset.try === "0"){
         vid.dataset.try = "1";
-        vid.src = "https://drive.google.com/uc?export=download&id=" + vid.dataset.id;
+        vid.src = "https://drive.usercontent.google.com/download?id=" + vid.dataset.id + "&export=download&confirm=t";
         vid.load();
         vid.play().catch(function(){});
         return;
     }
+    vid.pause();
+    vid.removeAttribute('src');
+    vid.style.display = "none";
     ctrl.classList.add('hide');
-    document.getElementById('playBtn').textContent = "▶";
-    alert("Video load nahi hui. Google Drive link check karein.");
+    clearFrame();
+    const f = document.createElement('iframe');
+    f.src = "https://drive.google.com/file/d/" + vid.dataset.id + "/preview";
+    f.allow = "autoplay; fullscreen";
+    f.setAttribute('allowfullscreen', '');
+    f.style.cssText = "width:100%;height:100%;border:0;display:block;";
+    boxEl.appendChild(f);
 });
 
 function togglePlay(){
