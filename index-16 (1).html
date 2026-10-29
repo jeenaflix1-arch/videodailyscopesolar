@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Scope Solar</title>
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+
+body{
+    font-family:Arial, Helvetica, sans-serif;
+    background:#07131b;
+    color:#fff;
+    overflow-x:hidden;
+}
+
+.page{
+    width:100%;
+    min-height:100vh;
+    background:
+    linear-gradient(rgba(0,0,0,.12), rgba(0,0,0,.18)),
+    url("https://i.postimg.cc/NF4dsmDq/file-000000002ca072469d2a024645a6dfef.png");
+    background-size:cover;
+    background-position:center;
+    background-repeat:no-repeat;
+    padding-bottom:25px;
+}
+
+.top-bar{
+    width:100%;
+    height:48px;
+    border-top:1px solid rgba(255,184,0,.85);
+    border-bottom:1px solid rgba(255,184,0,.85);
+    background:rgba(0,0,0,.92);
+    display:flex;
+    align-items:center;
+    gap:10px;
+    padding:0 14px;
+    position:sticky;
+    top:0;
+    left:0;
+    z-index:9999;
+}
+
+.flash{color:#ffb800;font-size:22px;flex-shrink:0;}
+
+.live{
+    color:#ff2d2d;
+    font-size:15px;
+    font-weight:900;
+    display:flex;
+    align-items:center;
+    gap:7px;
+    animation:liveBlink 1s infinite;
+}
+.live::before{content:"●";color:#ff0000;font-size:18px;}
+
+@keyframes liveBlink{
+    0%,100%{opacity:1;text-shadow:0 0 10px #ff0000;}
+    50%{opacity:.35;text-shadow:0 0 2px #ff0000;}
+}
+
+.marquee{
+    flex:1;
+    overflow:hidden;
+    white-space:nowrap;
+    font-size:13px;
+    font-weight:700;
+    color:#fff;
+}
+.marquee b{color:#ffb800;}
+
+.content{
+    width:100%;
+    max-width:430px;
+    margin:auto;
+    padding:18px 12px;
+}
+
+.hero-row{display:flex;justify-content:space-between;align-items:flex-start;}
+
+.title h1{
+    font-size:58px;
+    line-height:.9;
+    font-weight:900;
+    letter-spacing:1px;
+    text-shadow:0 4px 10px rgba(0,0,0,.55);
+}
+.title span{color:#ffb800;}
+
+.logo{width:120px;height:120px;object-fit:contain;}
+
+.tagline{
+    margin-top:16px;
+    font-size:24px;
+    font-weight:900;
+    line-height:1.1;
+    text-shadow:0 4px 8px rgba(0,0,0,.65);
+}
+
+.line{width:65px;height:4px;background:#ffb800;margin-top:20px;}
+
+.about{
+    margin-top:20px;
+    font-size:16px;
+    line-height:1.5;
+    text-shadow:0 4px 8px rgba(0,0,0,.7);
+}
+
+.mini-box{
+    margin-top:28px;
+    width:220px;
+    border:1px solid rgba(255,184,0,.6);
+    border-radius:15px;
+    background:rgba(0,0,0,.82);
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    overflow:hidden;
+}
+.mini{padding:12px 5px;text-align:center;border-right:1px solid rgba(255,184,0,.3);}
+.mini:last-child{border-right:none;}
+.mini-icon{font-size:24px;color:#ffb800;margin-bottom:5px;}
+.mini p{font-size:10px;font-weight:900;line-height:1.4;}
+
+.player-card{
+    margin:24px auto 0;
+    width:360px;
+    max-width:100%;
+    border:1px solid rgba(255,184,0,.65);
+    border-radius:16px;
+    background:rgba(0,0,0,.88);
+    padding:12px;
+}
+
+.player-head{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:10px;
+}
+.player-head h2{font-size:15px;font-weight:900;}
+
+.player-live{
+    background:#ef1025;
+    color:#fff;
+    border-radius:7px;
+    padding:6px 10px;
+    font-size:12px;
+    font-weight:900;
+    animation:playerLiveBlink 1s infinite;
+}
+@keyframes playerLiveBlink{
+    0%,100%{opacity:1;box-shadow:0 0 12px rgba(239,16,37,.75);}
+    50%{opacity:.35;box-shadow:0 0 2px rgba(239,16,37,.25);}
+}
+
+.video-box{
+    width:100%;
+    aspect-ratio:9/16;
+    background:#000;
+    border-radius:12px;
+    overflow:hidden;
+}
+.video-box{position:relative;}
+.video-box video{
+    width:100%;
+    height:100%;
+    object-fit:contain;
+    display:block;
+    background:#000;
+}
+.ctrl{
+    position:absolute;
+    left:8px;
+    right:8px;
+    bottom:8px;
+    background:rgba(0,0,0,.72);
+    border:1px solid rgba(255,184,0,.5);
+    border-radius:12px;
+    padding:10px;
+    z-index:5;
+    transition:opacity .25s;
+}
+.ctrl.hide{opacity:0;pointer-events:none;}
+.ctrl .time{color:#fff;}
+.ctrl input[type=range]{width:100%;accent-color:#ffb800;height:22px;}
+.ctrl-row{display:flex;align-items:center;justify-content:space-between;gap:6px;margin-top:8px;}
+.ctrl button,.ctrl select{
+    height:34px;
+    min-width:38px;
+    border:none;
+    border-radius:8px;
+    background:#ffb800;
+    color:#111;
+    font-weight:900;
+    font-size:12px;
+    padding:0 8px;
+}
+.time{font-size:12px;font-weight:700;white-space:nowrap;}
+
+.controls-extra{margin-top:10px;}
+.controls-extra a{
+    height:34px;
+    border-radius:8px;
+    background:#ffb800;
+    color:#111;
+    font-size:11px;
+    font-weight:900;
+    text-decoration:none;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+}
+
+.features{
+    margin-top:28px;
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    text-align:center;
+}
+.feature{padding:0 5px;border-right:1px solid rgba(255,184,0,.35);}
+.feature:last-child{border-right:none;}
+.feature-icon{
+    width:56px;
+    height:56px;
+    border:1px solid #ffb800;
+    border-radius:50%;
+    margin:auto;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    color:#ffb800;
+    font-size:26px;
+    background:rgba(0,0,0,.25);
+}
+.feature h3{margin-top:10px;color:#ffb800;font-size:10px;font-weight:900;}
+.feature p{margin-top:6px;font-size:10px;line-height:1.4;}
+
+.video-list{margin-top:22px;}
+.video-list button{
+    width:100%;
+    margin-top:8px;
+    padding:12px;
+    background:rgba(0,0,0,.78);
+    border:1px solid rgba(255,184,0,.4);
+    border-radius:12px;
+    color:#fff;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    font-weight:900;
+    font-size:13px;
+    cursor:pointer;
+}
+.video-list button.active{
+    border-color:#ffb800;
+    box-shadow:0 0 14px rgba(255,184,0,.5);
+}
+.video-list .tag{
+    background:#ffb800;
+    color:#111;
+    border-radius:6px;
+    padding:4px 8px;
+    font-size:11px;
+}
+
+.eid-bar{
+    margin-top:28px;
+    border:1px solid #ffb800;
+    border-radius:15px;
+    background:rgba(0,0,0,.88);
+    padding:12px;
+    display:grid;
+    grid-template-columns:85px 1fr 60px;
+    gap:10px;
+    align-items:center;
+    animation:eidBlink 1.2s infinite;
+}
+@keyframes eidBlink{
+    0%,100%{box-shadow:0 0 0 rgba(255,184,0,0);}
+    50%{box-shadow:0 0 25px rgba(255,184,0,.6);}
+}
+.moon{font-size:42px;color:#ffb800;}
+.eid-text{color:#ffb800;font-size:28px;font-weight:900;line-height:.9;}
+.eid-center small{font-size:12px;}
+.eid-center b{display:block;color:#ffb800;font-size:16px;margin-top:2px;}
+.gift{font-size:42px;text-align:center;}
+.urdu{grid-column:1/4;text-align:center;margin-top:5px;font-size:11px;}
+
+@media(max-width:390px){
+    .title h1{font-size:52px;}
+    .logo{width:105px;height:105px;}
+    .player-card{width:350px;}
+}
+</style>
+</head>
+
+<body>
+
+<div class="page">
+
+    <div class="top-bar">
+        <div class="flash">⚡</div>
+        <div class="live">LIVE</div>
+        <div class="marquee">
+            <marquee scrollamount="4">
+                Solar! It's time to free <b>Pakistan</b> from <b>expensive electricity.</b> Here you can watch videos.
+            </marquee>
+        </div>
+    </div>
+
+    <div class="content">
+
+        <div class="hero-row">
+            <div class="title">
+                <h1>SCOPE <span>SOLAR</span></h1>
+            </div>
+            <img class="logo" src="https://i.postimg.cc/9FdXcMy4/imgpsh-fullsize-anim.webp" alt="Scope Solar">
+        </div>
+
+        <div class="tagline">BRIGHT FUTURE.<br>FREE ENERGY.</div>
+        <div class="line"></div>
+
+        <div class="about">
+            We provide smart solar solutions for a cleaner and better tomorrow.
+        </div>
+
+        <div class="mini-box">
+            <div class="mini"><div class="mini-icon">☀️</div><p>CLEAN<br>ENERGY</p></div>
+            <div class="mini"><div class="mini-icon">🍃</div><p>LOWER<br>BILLS</p></div>
+            <div class="mini"><div class="mini-icon">🛡️</div><p>RELIABLE<br>POWER</p></div>
+        </div>
+
+        <!-- PLAYER -->
+        <div class="player-card">
+
+            <div class="player-head">
+                <h2 id="active-title">Latest Video</h2>
+                <div class="player-live">● LIVE</div>
+            </div>
+
+            <div class="video-box">
+                <video
+                    id="vid"
+                    playsinline
+                    preload="metadata"
+                    controlsList="nodownload nofullscreen noremoteplayback"
+                    disablePictureInPicture></video>
+                <div class="ctrl">
+                <input type="range" id="seek" min="0" max="100" step="0.1" value="0">
+                <div class="ctrl-row">
+                    <button id="playBtn" type="button">▶</button>
+                    <button id="backBtn" type="button">⟲ 10</button>
+                    <button id="fwdBtn" type="button">10 ⟳</button>
+                    <span class="time" id="time">0:00 / 0:00</span>
+                    <select id="speed">
+                        <option value="0.5">0.5x</option>
+                        <option value="0.75">0.75x</option>
+                        <option value="1" selected>1x</option>
+                        <option value="1.25">1.25x</option>
+                        <option value="1.5">1.5x</option>
+                        <option value="2">2x</option>
+                    </select>
+                </div>
+            </div>
+            </div>
+
+            <div class="controls-extra">
+                <a id="download-link" href="#" target="_blank" rel="noopener" download>DOWNLOAD</a>
+            </div>
+
+        </div>
+
+        <div class="features">
+            <div class="feature">
+                <div class="feature-icon">⚡</div>
+                <h3>SAVE ELECTRICITY</h3>
+                <p>Reduce bills<br>up to 80%</p>
+            </div>
+            <div class="feature">
+                <div class="feature-icon">🛡️</div>
+                <h3>RELIABLE & SAFE</h3>
+                <p>High quality equipment<br>& long life</p>
+            </div>
+            <div class="feature">
+                <div class="feature-icon">🍃</div>
+                <h3>ECO FRIENDLY</h3>
+                <p>Clean energy for<br>a green Pakistan</p>
+            </div>
+            <div class="feature">
+                <div class="feature-icon">🎧</div>
+                <h3>24/7 SUPPORT</h3>
+                <p>We are always<br>here to help you</p>
+            </div>
+        </div>
+
+        <!-- VIDEO LIST (right below the player area) -->
+        <div class="video-list" id="video-list"></div>
+
+        <div class="eid-bar">
+            <div>
+                <div class="moon">☾</div>
+                <div class="eid-text">عید<br>مبارک</div>
+            </div>
+            <div class="eid-center">
+                <small>This Eid, give the gift of a better tomorrow.</small>
+                <b>CHOOSE SOLAR.</b>
+                <b>CHOOSE SAVINGS.</b>
+                <b>CHOOSE PAKISTAN.</b>
+            </div>
+            <div class="gift">🎁</div>
+            <div class="urdu">
+                اس عید، روشن مستقبل کا تحفہ دیں۔ بجلی کے اخراجات کم کریں، پاکستان کو مضبوط بنائیں۔
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<script>
+
+/*
+  صرف گوگل ڈرائیو لنک کی ID لگائیں (لنک میں /d/ اور /view کے درمیان والا حصہ)۔
+*/
+const videos = [
+    { title: "Latest Video", id: "1-YV6NmgvDmcY7TBep_VGCjPAMSVDokR2",
+      src: "https://id-preview--c2d0f16f-633f-498a-942b-c7fcb589deab.lovable.app/__l5e/assets-v1/d752415e-7ce4-4b11-b55f-f3c344ffb227/scope-video-latest.mp4" },
+    { title: "Video 1",      id: "1cN6PdBF2fncasjlGYbBIfJVnGHsgnRrY",
+      src: "https://id-preview--c2d0f16f-633f-498a-942b-c7fcb589deab.lovable.app/__l5e/assets-v1/ce0a4d91-45fc-4f34-a05e-118c9d76d74f/scope-video-1.mp4" },
+    { title: "Video 2",      id: "1TDzPTywlg7FPi_TW2w6_3rj5N95SH1IQ" },
+    { title: "Video 3",      id: "VIDEO_3_ID_YAHAN_LAGAYEN" },
+    { title: "Video 4",      id: "VIDEO_4_ID_YAHAN_LAGAYEN" }
+];
+
+function driveStream(id){
+    return "https://drive.usercontent.google.com/download?id=" + id + "&export=download&confirm=t";
+}
+
+const vid     = document.getElementById('vid');
+const seek    = document.getElementById('seek');
+const playBtn = document.getElementById('playBtn');
+const timeEl  = document.getElementById('time');
+const speedEl = document.getElementById('speed');
+const titleEl = document.getElementById('active-title');
+const dlLink  = document.getElementById('download-link');
+const listEl  = document.getElementById('video-list');
+
+function fmt(t){
+    if(!isFinite(t)) t = 0;
+    const m = Math.floor(t/60);
+    const s = Math.floor(t%60);
+    return m + ":" + (s<10 ? "0" : "") + s;
+}
+
+const ctrl = document.querySelector('.ctrl');
+
+function playVideo(index){
+    const v = videos[index];
+    titleEl.innerText = v.title;
+    vid.dataset.try = "0";
+    vid.style.display = "block"; ctrl.classList.add("hide");
+    vid.src = v.src || driveStream(v.id);
+    dlLink.href = v.src || ("https://drive.google.com/uc?export=download&id=" + v.id);
+    vid.load();
+    vid.playbackRate = Number(speedEl.value);
+    vid.play().catch(function(){});
+    document.querySelectorAll('.video-list button').forEach(function(b, i){
+        b.classList.toggle('active', i === index);
+    });
+    vid.dataset.id = v.id;
+}
+
+/* اگر ڈرائیو سیدھی ویڈیو نہ چلنے دے تو ڈرائیو کا اپنا پلیئر خود کھل جائے */
+vid.addEventListener('error', function(){
+    if(vid.dataset.try === "0"){
+        vid.dataset.try = "1";
+        vid.src = "https://drive.google.com/uc?export=download&id=" + vid.dataset.id;
+        vid.load();
+        vid.play().catch(function(){});
+        return;
+    }
+    ctrl.classList.add('hide');
+    document.getElementById('playBtn').textContent = "▶";
+    alert("Video load nahi hui. Google Drive link check karein.");
+});
+
+function togglePlay(){
+    if(vid.paused){ vid.play().catch(function(){}); } else { vid.pause(); }
+}
+
+playBtn.onclick = togglePlay;
+let hideTimer;
+function showCtrl(){
+    ctrl.classList.remove('hide');
+    clearTimeout(hideTimer);
+    hideTimer = setTimeout(function(){
+        if(!vid.paused){ ctrl.classList.add('hide'); }
+    }, 3500);
+}
+function hideCtrl(){
+    clearTimeout(hideTimer);
+    ctrl.classList.add('hide');
+}
+vid.onclick = function(){
+    if(ctrl.classList.contains('hide')){ showCtrl(); } else { hideCtrl(); }
+};
+ctrl.addEventListener('click', showCtrl);
+ctrl.addEventListener('input', showCtrl);
+vid.addEventListener('pause', function(){ clearTimeout(hideTimer); ctrl.classList.remove('hide'); });
+vid.addEventListener('play', showCtrl);
+document.getElementById('backBtn').onclick = function(){ vid.currentTime = Math.max(0, vid.currentTime - 10); };
+document.getElementById('fwdBtn').onclick  = function(){ vid.currentTime = Math.min(vid.duration || 0, vid.currentTime + 10); };
+speedEl.onchange = function(){ vid.playbackRate = Number(speedEl.value); };
+
+vid.addEventListener('play',  function(){ playBtn.textContent = "❚❚"; });
+vid.addEventListener('pause', function(){ playBtn.textContent = "▶"; });
+vid.addEventListener('timeupdate', function(){
+    if(vid.duration){ seek.value = (vid.currentTime / vid.duration) * 100; }
+    timeEl.textContent = fmt(vid.currentTime) + " / " + fmt(vid.duration);
+});
+vid.addEventListener('loadedmetadata', function(){
+    timeEl.textContent = fmt(vid.currentTime) + " / " + fmt(vid.duration);
+});
+seek.addEventListener('input', function(){
+    if(vid.duration){ vid.currentTime = (seek.value / 100) * vid.duration; }
+});
+
+videos.forEach(function(v, i){
+    const btn = document.createElement('button');
+    btn.innerHTML = '<span class="tag">' + v.title + '</span><span>▶ PLAY</span>';
+    btn.onclick = function(){ playVideo(i); };
+    listEl.appendChild(btn);
+});
+
+playVideo(0);
+
+</script>
+
+</body>
+</html>
